@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Football Player Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#playerForm").on("submit", function (event) {
+                event.preventDefault();
+                const form = $(this);
+                $.ajax({
+                    url: form.attr("action"),
+                    method: form.attr("method"),
+                    data: form.serialize(),
+                    success: function () {
+                        $('#successModal').modal('show');
+                        form[0].reset();
+                    },
+                    error: function () {
+                        alert("There was an error processing the form.");
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Football Club</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="btn btn-primary" href="/players">View Players</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Registration Form -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    Football Player Registration
+                </div>
+                <div class="card-body">
+                    <!-- Success Message after submission -->
+                    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                        <p th:text="${successMessage}"></p>
+                    </div>
+
+                    <form id="playerForm" th:action="@{/register}" th:object="${player}" method="post">
+                        <!-- Player Name -->
+                        <div class="mb-3">
+                            <label class="form-label">Player Name</label>
+                            <input type="text" class="form-control" th:field="*{name}" placeholder="Enter player name" required>
+                        </div>
+
+                        <!-- Contact Number -->
+                        <div class="mb-3">
+                            <label class="form-label">Contact Number</label>
+                            <input type="text" class="form-control" th:field="*{contactNumber}" placeholder="Enter contact number" required>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" th:field="*{email}" placeholder="Enter email" required>
+                        </div>
+
+                        <!-- Date of Birth -->
+                        <div class="mb-3">
+                            <label class="form-label">Date of Birth</label>
+                            <input type="date" class="form-control" th:field="*{dateOfBirth}" required>
+                        </div>
+
+                        <!-- Player Position -->
+                        <div class="mb-3">
+                            <label class="form-label">Player Position</label>
+                            <input type="text" class="form-control" th:field="*{playerPosition}" placeholder="Enter player position" required>
+                        </div>
+
+                        <!-- State -->
+                        <div class="mb-3">
+                            <label class="form-label">State</label>
+                            <input type="text" class="form-control" th:field="*{state}" placeholder="Enter state" required>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success">Register Player</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Player registered successfully!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
